@@ -1,36 +1,11 @@
 require 'sinatra'
 require 'pp'
 
-class User
-
-  def self.current
-    # p "getting #{@current ? @current.login : 'nil'}"
-    @current ||= User.new
-  end
-
-  attr_accessor :login
-  attr_accessor :password
-  attr_accessor :active
-
-  def signup!(params)
-    self.login = params.delete('login')
-    p "signing up as #{login}"
-    self.password = params.delete('password')
-    self.active = false
-  end
-
-  def login!(params)
-    self.active = valid_login?(params[:login], params[:password])
-  end
-
-  def valid_login?(login, password)
-    (self.login == login) and (self.password == password)
-  end
-end
+require 'models/user'
+require 'models/log'
 
 get '/' do
   @user = User.current
-  p "visiting / as #{@user.login}"
   erb :index
 end
 
@@ -39,6 +14,8 @@ get '/signup' do
 end
 
 post '/signup' do
+  Log.clear
+  Log.log(:signup, params)
   @user = User.current
   @user.signup!(params)
   redirect '/'
@@ -49,9 +26,18 @@ get '/login' do
 end
 
 post '/login' do
+  Log.log(:login, params)
   @user = User.current
-  @user.login!(params)
+  if @user.login!(params)
+    Log.log(:response, "Login succeeded")
+  else
+    Log.log(:response, "Login failed")
+  end
   redirect '/'
+end
+
+get '/verify' do
+  erb :verify
 end
 
 helpers do
