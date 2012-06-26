@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Secure remote password</title>
+  <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="bootstrap-responsive.min.css" />
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="row-fluid">
+      <div class="hero-unit span12">
+        <h1>Secure Remote Passwords</h1>
+        <p>
+        Secure remote passwords allow you to login with a password that will be unkown to the server and anyone eavesdropping
+        </p>
+      </div>
+    </div>
+
+    <%= yield %>
+
+    <script type="text/javascript" src="srp.js"> </script>
+
+  </body>
+</html>

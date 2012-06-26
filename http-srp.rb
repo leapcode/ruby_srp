@@ -34,10 +34,18 @@ get '/' do
   erb :index
 end
 
+get '/signup' do
+  erb :signup
+end
+
 post '/signup' do
   @user = User.current
   @user.signup!(params)
   redirect '/'
+end
+
+get '/login' do
+  erb :login
 end
 
 post '/login' do
