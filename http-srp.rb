@@ -53,3 +53,16 @@ post '/login' do
   @user.login!(params)
   redirect '/'
 end
+
+helpers do
+  def button_link(action, options = {})
+    action = action.to_s
+    label = action.capitalize
+    klass = "btn btn-large"
+    if options.delete(:primary)
+      klass += " btn-primary"
+      label += " now..."
+    end
+    %Q(<a href="#{action}" class="#{klass}" id="#{action}-btn">#{label}</a>)
+  end
+end
