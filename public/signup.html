@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Secure remote password</title>
+  <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="bootstrap-responsive.min.css" />
+</head>
+<body>
+
+<div class="container">
+
+  <div class="row-fluid">
+    <div class="hero-unit span12">
+      <h1>Secure Remote Passwords</h1>
+      <p>
+        Secure remote passwords allow you to login with a password that will be unkown to the server and anyone eavesdropping
+      </p>
+    </div>
+  </div>
+
+  <h2>1. Signup</h2>
+  <form class="form-horizontal" action="/signup" method="POST">
+    <legend>Signup to test secure remote passwords</legend>
+    <div class="control-group">
+      <label class="control-label" for="login">Login</label>
+      <input type="text" class"input-xlarge" name="login"></input>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="password">Password</label>
+      <input type="password" class"input-xlarge" name="password"></input>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Signup</button>
+      <a href="/" class="btn">Cancel</a>
+    </div>
+  </form>
+
+</div>
+
+
+<script type="text/javascript" src="srp.js"> </script>
+
+</body>
+</html>
