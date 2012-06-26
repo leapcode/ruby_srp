@@ -10,15 +10,19 @@ class AuthTest < Test::Unit::TestCase
   end
 
   def test_successful_auth
+    print "salt: "
+    puts @client.salt
+    print "verifier: "
+    puts @client.verifier
     assert @client.authenticate(@server, @username, @password)
   end
 
   def test_wrong_password
-    assert !@client.authenticate(@server, @username, "password")
+    assert !@client.authenticate(@server, @username, "wrong password")
   end
 
   def test_wrong_username
-    assert !@client.authenticate(@server, "username", @password)
+    assert !@client.authenticate(@server, "wrong username", @password)
   end
 end
 

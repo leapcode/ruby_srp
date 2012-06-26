@@ -21,6 +21,9 @@ module SRP
       aa = modpow(GENERATOR, a, PRIME_N) # A = g^a (mod N)
       bb, u = server.initialize_auth(aa)
       client_s = calculate_client_s(x, a, bb, u)
+      puts "bb: " + bb.to_s
+      puts "aa: " + aa.to_s
+      puts "client_s: " + client_s.to_s
       server.authenticate(aa, client_s)
     end
 

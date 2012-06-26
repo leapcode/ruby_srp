@@ -3,6 +3,7 @@ require 'pp'
 
 require 'models/user'
 require 'models/log'
+require '../lib/srp'
 
 get '/' do
   @user = User.current
@@ -22,6 +23,10 @@ post '/signup' do
 end
 
 get '/login' do
+  @user = User.current
+  Log.log(:init_server_login, params)
+  @auth = @user.initialize_auth(params)
+  Log.log(:init_client_login, @auth)
   erb :login
 end
 

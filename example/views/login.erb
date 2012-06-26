@@ -3,12 +3,20 @@
   <legend>Login with the user you <a href="/signup.html">created</a>.</legend>
   <div class="control-group">
     <label class="control-label" for="login">Login</label>
-    <input type="text" class"input-xlarge" name="login"></input>
+    <input type="text" class="input-xlarge" name="login"></input>
   </div>
 
   <div class="control-group">
     <label class="control-label" for="password">Password</label>
-    <input type="password" class"input-xlarge" name="password"></input>
+    <input type="password" class="input-xlarge" name="password"></input>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="srp-bb">B</label>
+    <input type="text" class="input-xlarge" disabled id="srp-bb" name="srp-bb" value="<%=@auth[:bb]%>"></input>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="srp-u">u</label>
+    <input type="text" class="input-xlarge" disabled id="srp-u" name="srp-u" value="<%=@auth[:u]%>"></input>
   </div>
 
   <div class="form-actions">
