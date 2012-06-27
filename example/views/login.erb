@@ -1,26 +1,20 @@
 <h2>2. Login</h2>
 <form class="form-horizontal" action="/login" method="POST">
-  <legend>Login with the user you <a href="/signup.html">created</a>.</legend>
+  <legend>Login with the user you <a href="/signup">created</a>.</legend>
   <div class="control-group">
-    <label class="control-label" for="login">Login</label>
-    <input type="text" class="input-xlarge" name="login"></input>
+    <label class="control-label" for="srp_username">Login</label>
+    <input type="text" class="input-xlarge" id="srp_username" name="srp_username"></input>
   </div>
 
   <div class="control-group">
-    <label class="control-label" for="password">Password</label>
-    <input type="password" class="input-xlarge" name="password"></input>
+    <label class="control-label" for="srp_password">Password</label>
+    <input type="password" class="input-xlarge" id="srp_password" name="srp_password"></input>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="srp-bb">B</label>
-    <input type="text" class="input-xlarge" disabled id="srp-bb" name="srp-bb" value="<%=@auth[:bb]%>"></input>
-  </div>
-  <div class="control-group">
-    <label class="control-label" for="srp-u">u</label>
-    <input type="text" class="input-xlarge" disabled id="srp-u" name="srp-u" value="<%=@auth[:u]%>"></input>
-  </div>
+  <input type="hidden" id="srp_url" name="srp_url" value="/"></input>
+  <input type="hidden" id="srp_server" name="srp_server" value="django"></input>
 
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
     <a href="/" class="btn">Cancel</a>
   </div>
 </form>

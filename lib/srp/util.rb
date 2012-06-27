@@ -33,6 +33,14 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
       Digest::SHA1.hexdigest(s)
     end
 
+    def sha256_hex(h)
+      Digest::SHA2.hexdigest([h].pack('H*'))
+    end
+
+    def sha256_str(s)
+      Digest::SHA2.hexdigest(s)
+    end
+
     def bigrand(bytes)
       OpenSSL::Random.random_bytes(bytes).unpack("H*")[0]
     end

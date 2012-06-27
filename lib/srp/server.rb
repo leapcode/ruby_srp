@@ -18,11 +18,13 @@ module SRP
       return @bb, u
     end
 
-    def authenticate(aa, client_s)
+    def authenticate(aa, m)
       u = calculate_u(aa, @bb, PRIME_N)
       base = (modpow(@verifier, u, PRIME_N) * aa) % PRIME_N
       server_s = modpow(base, @b, PRIME_N)
-      return client_s == server_s
+      if(m == calculate_m(aa, @bb, server_s))
+        return calculate_m(aa, m, server_s)
+      end
     end
 
 
@@ -34,8 +36,15 @@ module SRP
       bbhex = '%x' % [bb]
       hashin = '0' * (nlen - aahex.length) + aahex \
         + '0' * (nlen - bbhex.length) + bbhex
-      sha1_hex(hashin).hex
+      sha256_hex(hashin).hex
     end
+
+    def calculate_m(aa, bb, s)
+      # todo: we might want to 0fill this like for u
+      hashin = '%x%x%x' % [aa, bb, s]
+      sha256_hex(hashin).hex
+    end
+
   end
 end
 

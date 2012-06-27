@@ -24,10 +24,23 @@ end
 
 get '/login' do
   @user = User.current
-  Log.log(:init_server_login, params)
-  @auth = @user.initialize_auth(params)
-  Log.log(:init_client_login, @auth)
   erb :login
+end
+
+post '/handshake/' do
+  @user = User.current
+  Log.log(:handshake, params)
+  @auth = @user.initialize_auth(params)
+  Log.log(:init_auth, @auth)
+  erb :handshake, :layout => false, :content_type => :xml
+end
+
+post '/authenticate/' do
+  @user = User.current
+  Log.log(:authenticate, params)
+  @auth = @user.authenticate(params)
+  Log.log(:confirm_authentication, @auth)
+  erb :authenticate, :layout => false, :content_type => :xml
 end
 
 post '/login' do
@@ -54,6 +67,6 @@ helpers do
       klass += " btn-primary"
       label += " now..."
     end
-    %Q(<a href="#{action}" class="#{klass}" id="#{action}-btn">#{label}</a>)
+    %Q(<a href="#{action}" class="#{klass}" id="#{action}-view-btn">#{label}</a>)
   end
 end
