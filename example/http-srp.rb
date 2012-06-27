@@ -43,17 +43,6 @@ post '/authenticate/' do
   erb :authenticate, :layout => false, :content_type => :xml
 end
 
-post '/login' do
-  Log.log(:login, params)
-  @user = User.current
-  if @user.login!(params)
-    Log.log(:response, "Login succeeded")
-  else
-    Log.log(:response, "Login failed")
-  end
-  redirect '/'
-end
-
 get '/verify' do
   erb :verify
 end

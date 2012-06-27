@@ -26,18 +26,12 @@ class User
 
   def authenticate(params)
     if m2 = self.srp.authenticate(params.delete('aa').to_i, params.delete('M').to_i)
+      self.active = true
       return {:M2 => m2}
     else
+      self.active = false
       return {:error => "Access Denied"}
     end
   end
 
-
-  def login!(params)
-    self.active = valid_login?(params[:login], params[:password])
-  end
-
-  def valid_login?(login, password)
-    (self.login == login) and (self.password == password)
-  end
 end
