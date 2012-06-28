@@ -5,7 +5,12 @@ module SRP
   module Util
 
     # constants both sides know
-    PRIME_N = <<-EOS.split.join.hex # 1024 bits modulus (N)
+    # in this case taken from srp-js
+    PRIME_N = <<-EOS.split.join.hex
+115b8b692e0e045692cf280b436735c77a5a9e8a9e7ed56c965f87db5b2a2ece3
+    EOS
+
+    BIG_PRIME_N = <<-EOS # 1024 bits modulus (N)
 eeaf0ab9adb38dd69c33f80afa8fc5e86072618775ff3c0b9ea2314c9c25657
 6d674df7496ea81d3383b4813d692c6e0e0d5d8e250b98be48e495c1d6089da
 d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
@@ -25,14 +30,6 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
       end
     end
 
-    def sha1_hex(h)
-      Digest::SHA1.hexdigest([h].pack('H*'))
-    end
-
-    def sha1_str(s)
-      Digest::SHA1.hexdigest(s)
-    end
-
     def sha256_hex(h)
       Digest::SHA2.hexdigest([h].pack('H*'))
     end
@@ -46,6 +43,13 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     end
 
     def multiplier
+      return "c46d46600d87fef149bd79b81119842f3c20241fda67d06ef412d8f6d9479c58".hex % PRIME_N
+      @k ||= calculate_multiplier
+    end
+
+    protected
+
+    def calculate_multiplier
       n = PRIME_N
       g = GENERATOR
       nhex = '%x' % [n]
@@ -53,8 +57,15 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
       ghex = '%x' % [g]
       hashin = '0' * (nlen - nhex.length) + nhex \
         + '0' * (nlen - ghex.length) + ghex
-      sha1_hex(hashin).hex % n
+      sha256_hex(hashin).hex % n
     end
+
+    def calculate_m(aa, bb, s)
+      # todo: we might want to 0fill this like for u
+      hashin = '%x%x%x' % [aa, bb, s]
+      sha256_hex(hashin).hex
+    end
+
   end
 
 end

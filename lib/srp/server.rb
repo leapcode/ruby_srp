@@ -39,12 +39,6 @@ module SRP
       sha256_hex(hashin).hex
     end
 
-    def calculate_m(aa, bb, s)
-      # todo: we might want to 0fill this like for u
-      hashin = '%x%x%x' % [aa, bb, s]
-      sha256_hex(hashin).hex
-    end
-
   end
 end
 

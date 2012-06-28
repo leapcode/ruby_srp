@@ -4,18 +4,18 @@
   <legend>Signup to test secure remote passwords</legend>
   <div class="control-group">
     <label class="control-label" for="login">Login</label>
-    <input type="text" class"input-xlarge" name="login"></input>
+    <input type="text" class"input-xlarge" name="srp_username" id="srp_username"></input>
   </div>
 
   <div class="control-group">
     <label class="control-label" for="password">Password</label>
-    <input type="password" class"input-xlarge" name="password"></input>
-    <input type="hidden" class"input-xlarge" name="seed" value="624848790506324805995013"></input>
-    <input type="hidden" class"input-xlarge" name="verifier" value="100580140046706175735129154266794946404091486659235926309138114843862401271008476617107722147233360718775042845375531421388163398889326297385327521531575749857884877960888755227994771967905136828058233126017527751738166121598194480710839381273324624500340831193855479639683906360867824492692241079248646622455"></input>
+    <input type="password" class"input-xlarge" name="srp_password" id="srp_password"></input>
   </div>
 
+  <input type="hidden" id="srp_url" name="srp_url" value="/"></input>
+  <input type="hidden" id="srp_server" name="srp_server" value="django"></input>
   <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Signup</button>
+    <button type="submit" class="btn btn-primary" id="signup-btn">Signup</button>
     <a href="/" class="btn">Cancel</a>
   </div>
 </form>

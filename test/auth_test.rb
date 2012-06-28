@@ -10,10 +10,6 @@ class AuthTest < Test::Unit::TestCase
   end
 
   def test_successful_auth
-    print "salt: "
-    puts @client.salt
-    print "verifier: "
-    puts @client.verifier
     assert @client.authenticate(@server, @username, @password)
   end
 

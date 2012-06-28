@@ -14,12 +14,17 @@ get '/signup' do
   erb :signup
 end
 
-post '/signup' do
+# TODO: Client should generate the salt!
+# Getting things to work the srp-js way first.
+post '/register/salt/' do
   Log.clear
-  Log.log(:signup, params)
-  @user = User.current
-  @user.signup!(params)
-  redirect '/'
+  @user = User.new(params.delete('I'))
+  erb :salt, :layout => false, :content_type => :xml
+end
+
+post '/register/user/' do
+  User.current.verifier = params.delete('v').to_i
+  erb :ok, :layout => false, :content_type => :xml
 end
 
 get '/login' do

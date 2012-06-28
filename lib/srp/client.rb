@@ -21,10 +21,7 @@ module SRP
       aa = modpow(GENERATOR, a, PRIME_N) # A = g^a (mod N)
       bb, u = server.initialize_auth(aa)
       client_s = calculate_client_s(x, a, bb, u)
-      puts "bb: " + bb.to_s
-      puts "aa: " + aa.to_s
-      puts "client_s: " + client_s.to_s
-      server.authenticate(aa, client_s)
+      server.authenticate(aa, calculate_m(aa,bb,client_s))
     end
 
     protected
@@ -36,7 +33,7 @@ module SRP
     def calculate_x(username, password, salt)
       shex = '%x' % [salt]
       spad = if shex.length.odd? then '0' else '' end
-      sha1_hex(spad + shex + sha1_str([username, password].join(':'))).hex
+      sha256_hex(spad + shex + sha256_str([username, password].join(':'))).hex
     end
 
     def calculate_client_s(x, a, bb, u)

@@ -5,17 +5,21 @@ class User
     @current ||= User.new
   end
 
+  def self.current=(user)
+    @current = user
+  end
+
   attr_accessor :login
   attr_accessor :salt
   attr_accessor :verifier
   attr_accessor :active
   attr_accessor :srp
 
-  def signup!(params)
-    self.login = params.delete('login')
-    self.salt = params.delete('salt').to_i
-    self.verifier = params.delete('verifier').to_i
+  def initialize(login)
+    self.login = login
+    self.salt = OpenSSL::Random.random_bytes(10).unpack("H*")[0]
     self.active = false
+    User.current = self
   end
 
   def initialize_auth(params)
