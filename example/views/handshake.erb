@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<r s="<%=@user.salt%>" B="<%=@auth[:B]%>" />
+<%= %Q(<r s="%x" B="%x" />) % [@user.salt, @auth[:B]] %>

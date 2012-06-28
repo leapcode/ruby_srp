@@ -10,7 +10,8 @@ module SRP
     def initialize(username, password)
       @username = username
       @password = password
-      @salt = bigrand(10).hex
+      @salt = "5d3055e0acd3ddcfc15".hex # bigrand(10).hex
+      puts "salt = %i" %@salt
       @multiplier = multiplier # let's cache it
       calculate_verifier
     end
@@ -27,13 +28,16 @@ module SRP
     protected
     def calculate_verifier
       x = calculate_x(@username, @password, @salt)
+      puts "x = %i" % x
       @verifier = modpow(GENERATOR, x, PRIME_N)
+      puts "verifier = %i" % @verifier
+      @verifier
     end
 
     def calculate_x(username, password, salt)
       shex = '%x' % [salt]
-      spad = if shex.length.odd? then '0' else '' end
-      sha256_hex(spad + shex + sha256_str([username, password].join(':'))).hex
+      spad = "" # if shex.length.odd? then '0' else '' end
+      sha256_str(spad + shex + sha256_str([username, password].join(':'))).hex
     end
 
     def calculate_client_s(x, a, bb, u)

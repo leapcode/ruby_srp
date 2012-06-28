@@ -23,7 +23,7 @@ post '/register/salt/' do
 end
 
 post '/register/user/' do
-  User.current.verifier = params.delete('v').to_i
+  User.current.verifier = params.delete('v').hex
   erb :ok, :layout => false, :content_type => :xml
 end
 

@@ -4,7 +4,7 @@ class AuthTest < Test::Unit::TestCase
 
   def setup
     @username = 'user'
-    @password = 'opensasemi'
+    @password = 'opensesami'
     @client = SRP::Client.new(@username, @password)
     @server = SRP::Server.new(@client.salt, @client.verifier)
   end

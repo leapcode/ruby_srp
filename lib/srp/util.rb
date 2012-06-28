@@ -63,7 +63,7 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     def calculate_m(aa, bb, s)
       # todo: we might want to 0fill this like for u
       hashin = '%x%x%x' % [aa, bb, s]
-      sha256_hex(hashin).hex
+      sha256_str(hashin).hex
     end
 
   end
