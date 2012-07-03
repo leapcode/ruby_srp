@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<% if @auth[:M2] %>
-  <M><%="%x" % [@auth[:M2]]%></M>
-<% end %>
-<% if @auth[:error] %>
-  <error><%=@auth[:error]%></error>
-<% end %>
-

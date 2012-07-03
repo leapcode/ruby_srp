@@ -25,13 +25,13 @@ class User
   def initialize_auth(params)
     self.srp = SRP::Server.new(self.salt, self.verifier)
     bb, u = self.srp.initialize_auth(params.delete('A').hex)
-    return {:B => bb, :u => u}
+    return {:s => self.salt.to_s(16), :B => bb.to_s(16)}
   end
 
   def authenticate(params)
     if m2 = self.srp.authenticate(params.delete('M').hex)
       self.active = true
-      return {:M2 => m2}
+      return {:M => m2.to_s(16)}
     else
       self.active = false
       return {:error => "Access Denied"}

@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'pp'
+require 'json'
 
 require 'models/user'
 require 'models/log'
@@ -19,12 +20,14 @@ end
 post '/register/salt/' do
   Log.clear
   @user = User.new(params.delete('I'))
-  erb :salt, :layout => false, :content_type => :xml
+  content_type :json
+  { :salt => @user.salt.to_s(16) }.to_json
 end
 
 post '/register/user/' do
   User.current.verifier = params.delete('v').hex
-  erb :ok, :layout => false, :content_type => :xml
+  content_type :json
+  { :ok => true }.to_json
 end
 
 get '/login' do
@@ -35,9 +38,10 @@ end
 post '/handshake/' do
   @user = User.current
   Log.log(:handshake, params)
-  @auth = @user.initialize_auth(params)
-  Log.log(:init_auth, @auth)
-  erb :handshake, :layout => false, :content_type => :xml
+  @handshake = @user.initialize_auth(params)
+  Log.log(:init_auth, @handshake)
+  content_type :json
+  @handshake.to_json
 end
 
 post '/authenticate/' do
@@ -45,7 +49,8 @@ post '/authenticate/' do
   Log.log(:authenticate, params)
   @auth = @user.authenticate(params)
   Log.log(:confirm_authentication, @auth)
-  erb :authenticate, :layout => false, :content_type => :xml
+  content_type :json
+  @auth.to_json
 end
 
 get '/verify' do
