@@ -1,0 +1,25 @@
+section {
+  padding-top: 20px;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  background-image: url("glyphicons-halflings.png");
+}
+
+.with-icons {
+  list-style: none;
+  padding-top: 20px;
+}
+
+.with-icons i {
+  margin: 5px;
+}
+.with-icons li {
+  font-size: 18px;
+  line-height: 35px;
+
+}
+
+.btn {
+  margin-bottom: 15px;
+}
