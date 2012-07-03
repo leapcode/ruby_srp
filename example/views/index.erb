@@ -3,19 +3,19 @@
   <div class="span4">
     <h2>1. Signup</h2>
     <p>
-    First you signup just like normal. Your browser runs a bit of javascript and does not transfer your password but some validator based on it.
+    Your browser transfers an encrypted verifier based your password. But it does not send the password itself.
     </p>
   </div>
   <div class="span4">
     <h2>2. Login</h2>
     <p>
-    Login using the same credentials. Again javascript is used to calculate a random number and a key based on it that the server then uses to validate your password.
+    You enter your password - your browser exchanges encrypted data with the site to check if it was the right one.
     </p>
   </div>
   <div class="span4">
     <h2>3. Verify</h2>
     <p>
-    The server logs will tell you your password was not transmitted in clear. Never the less the server can determine wether you were authorized.
+    You can see from the logs that your password was not send. The login process is different each time so it can't be replayed.
     </p>
   </div>
 </div>
