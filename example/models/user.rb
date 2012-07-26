@@ -1,5 +1,7 @@
 class User
 
+  include SRP::Authentication
+
   def self.current
     @current
   end
@@ -22,14 +24,13 @@ class User
     User.current = self
   end
 
-  def initialize_auth(params)
-    self.srp = SRP::Server.new(self.salt, self.verifier)
-    bb, u = self.srp.initialize_auth(params.delete('A').hex)
+  def handshake(params)
+    bb, u = initialize_auth(params.delete('A').hex)
     return {:s => self.salt.to_s(16), :B => bb.to_s(16)}
   end
 
-  def authenticate(params)
-    if m2 = self.srp.authenticate(params.delete('M').hex)
+  def validate(params)
+    if m2 = authenticate(params.delete('M').hex)
       self.active = true
       return {:M => m2.to_s(16)}
     else

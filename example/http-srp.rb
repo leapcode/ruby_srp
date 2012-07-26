@@ -2,9 +2,9 @@ require 'sinatra'
 require 'pp'
 require 'json'
 
+require '../lib/srp'
 require 'models/user'
 require 'models/log'
-require '../lib/srp'
 
 get '/' do
   @user = User.current
@@ -24,7 +24,7 @@ post '/register/salt/' do
   { :salt => @user.salt.to_s(16) }.to_json
 end
 
-post '/register/user/' do
+post '/register/user' do
   User.current.verifier = params.delete('v').hex
   content_type :json
   { :ok => true }.to_json
@@ -35,19 +35,19 @@ get '/login' do
   erb :login
 end
 
-post '/handshake/' do
+post '/handshake' do
   @user = User.current
   Log.log(:handshake, params)
-  @handshake = @user.initialize_auth(params)
+  @handshake = @user.handshake(params)
   Log.log(:init_auth, @handshake)
   content_type :json
   @handshake.to_json
 end
 
-post '/authenticate/' do
+post '/authenticate' do
   @user = User.current
   Log.log(:authenticate, params)
-  @auth = @user.authenticate(params)
+  @auth = @user.validate(params)
   Log.log(:confirm_authentication, @auth)
   content_type :json
   @auth.to_json

@@ -9,5 +9,5 @@
 $:.unshift File.dirname(__FILE__)
 module SRP
   autoload :Client, 'srp/client'
-  autoload :Server, 'srp/server'
+  autoload :Authentication, 'srp/authentication'
 end

@@ -1,12 +1,24 @@
 require File.expand_path(File.dirname(__FILE__) + '/test_helper')
 
+class User
+
+  include SRP::Authentication
+
+  attr_accessor :salt, :verifier
+
+  def initialize(salt, verifier)
+    @salt = salt
+    @verifier = verifier
+  end
+end
+
 class AuthTest < Test::Unit::TestCase
 
   def setup
     @username = 'user'
     @password = 'opensesami'
     @client = SRP::Client.new(@username, @password)
-    @server = SRP::Server.new(@client.salt, @client.verifier)
+    @server = User.new(@client.salt, @client.verifier)
   end
 
   def test_successful_auth
