@@ -66,6 +66,15 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
       sha256_str(hashin).hex
     end
 
+    def calculate_u(aa, bb, n)
+      nlen = 2 * ((('%x' % [n]).length * 4 + 7) >> 3)
+      aahex = '%x' % [aa]
+      bbhex = '%x' % [bb]
+      return sha256_str("%x%x" % [aa, bb]).hex
+      hashin = '0' * (nlen - aahex.length) + aahex \
+        + '0' * (nlen - bbhex.length) + bbhex
+      sha256_str(hashin).hex
+    end
   end
 
 end
