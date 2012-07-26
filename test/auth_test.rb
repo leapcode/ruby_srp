@@ -10,6 +10,16 @@ class User
     @salt = salt
     @verifier = verifier
   end
+
+  def handshake(aa)
+    @session = initialize_auth(aa)
+    return @session.bb
+  end
+
+  def validate(m)
+    authenticate(m, @session)
+  end
+
 end
 
 class AuthTest < Test::Unit::TestCase

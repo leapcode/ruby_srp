@@ -19,10 +19,10 @@ module SRP
       x = calculate_x(username, password, salt)
       a = bigrand(32).hex
       aa = modpow(GENERATOR, a, PRIME_N) # A = g^a (mod N)
-      session = server.initialize_auth(aa)
-      u = calculate_u(aa, session.bb, PRIME_N)
-      client_s = calculate_client_s(x, a, session.bb, u)
-      server.authenticate(calculate_m(aa,session.bb,client_s), session)
+      bb = server.handshake(aa)
+      u = calculate_u(aa, bb, PRIME_N)
+      client_s = calculate_client_s(x, a, bb, u)
+      server.validate(calculate_m(aa, bb, client_s))
     end
 
     protected
