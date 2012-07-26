@@ -24,9 +24,6 @@ module SRP
       base = (modpow(@verifier, u, PRIME_N) * @aa) % PRIME_N
       server_s = modpow(base, @b, PRIME_N)
       if(m == calculate_m(@aa, @bb, server_s))
-        puts "A = %x" % [@aa]
-        puts "M = %x" % [m]
-        puts "s = %x" % [server_s]
         return calculate_m(@aa, m, server_s)
       end
     end

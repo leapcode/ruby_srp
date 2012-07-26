@@ -11,7 +11,6 @@ module SRP
       @username = username
       @password = password
       @salt = "5d3055e0acd3ddcfc15".hex # bigrand(10).hex
-      puts "salt = %i" %@salt
       @multiplier = multiplier # let's cache it
       calculate_verifier
     end
@@ -22,15 +21,13 @@ module SRP
       aa = modpow(GENERATOR, a, PRIME_N) # A = g^a (mod N)
       bb, u = server.initialize_auth(aa)
       client_s = calculate_client_s(x, a, bb, u)
-      server.authenticate(aa, calculate_m(aa,bb,client_s))
+      server.authenticate(calculate_m(aa,bb,client_s))
     end
 
     protected
     def calculate_verifier
       x = calculate_x(@username, @password, @salt)
-      puts "x = %i" % x
       @verifier = modpow(GENERATOR, x, PRIME_N)
-      puts "verifier = %i" % @verifier
       @verifier
     end
 
