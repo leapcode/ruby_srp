@@ -1,0 +1,3 @@
+[submodule "example/public/srp-js"]
+	path = example/public/srp-js
+	url = git://github.com/leapcode/srp-js.git
