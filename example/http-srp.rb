@@ -17,6 +17,8 @@ end
 
 # TODO: Client should generate the salt!
 # Getting things to work the srp-js way first.
+# Also these are the urls srp-js is used to - it's easy
+# to overwrite them though by writing your own srp-js wrapper
 post '/register/salt/' do
   Log.clear
   @user = User.new(params.delete('I'))
@@ -24,7 +26,7 @@ post '/register/salt/' do
   { :salt => @user.salt.to_s(16) }.to_json
 end
 
-post '/register/user' do
+post '/register/user/' do
   User.current.verifier = params.delete('v').hex
   content_type :json
   { :ok => true }.to_json
@@ -35,7 +37,7 @@ get '/login' do
   erb :login
 end
 
-post '/handshake' do
+post '/handshake/' do
   @user = User.current
   Log.log(:handshake, params)
   @handshake = @user.handshake(params)
@@ -44,7 +46,7 @@ post '/handshake' do
   @handshake.to_json
 end
 
-post '/authenticate' do
+post '/authenticate/' do
   @user = User.current
   Log.log(:authenticate, params)
   @auth = @user.validate(params)
