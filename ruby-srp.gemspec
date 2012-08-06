@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "ruby-srp"
-  s.version           = "0.0.1"
+  s.version           = "0.0.2"
   s.platform          = Gem::Platform::RUBY
   s.authors           = ["Azul"]
   s.email             = ["azul@leap.se"]

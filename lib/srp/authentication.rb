@@ -41,6 +41,10 @@ module SRP
       return Session.new(aa, verifier)
     end
 
+    def authenticate!(m, session)
+      authenticate(m, session) || raise(SRP::WrongPassword)
+    end
+
     def authenticate(m, session)
       if(m == session.m1(verifier))
         return session.m2(m, verifier)

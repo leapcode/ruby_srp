@@ -10,4 +10,6 @@ $:.unshift File.dirname(__FILE__)
 module SRP
   autoload :Client, 'srp/client'
   autoload :Authentication, 'srp/authentication'
+  class WrongPassword < StandardError
+  end
 end
