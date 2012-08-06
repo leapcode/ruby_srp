@@ -11,7 +11,7 @@ class User
     @verifier = verifier
   end
 
-  def handshake(aa)
+  def handshake(login, aa)
     @session = initialize_auth(aa)
     return @session.bb
   end
