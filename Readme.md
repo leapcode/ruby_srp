@@ -4,4 +4,4 @@
 
 Secure remote password for ruby.
 
-[![Build Status](https://secure.travis-ci.org/leapcode/ruby-srp.png?branch=master)](http://travis-ci.org/leapcode/ruby-srp) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/leapcode/ruby-srp)
+[![Build Status](https://secure.travis-ci.org/leapcode/ruby_srp.png?branch=master)](http://travis-ci.org/leapcode/ruby_srp) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/leapcode/ruby_srp)
