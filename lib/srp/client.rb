@@ -7,10 +7,10 @@ module SRP
 
     attr_reader :salt, :verifier
 
-    def initialize(username, password)
+    def initialize(username, password, salt = nil)
       @username = username
       @password = password
-      @salt = "5d3055e0acd3ddcfc15".hex # bigrand(10).hex
+      @salt = salt.hex || bigrand(4).hex
       @multiplier = multiplier # let's cache it
       calculate_verifier
     end
@@ -27,15 +27,15 @@ module SRP
 
     protected
     def calculate_verifier
-      x = calculate_x(@username, @password, @salt)
-      @verifier = modpow(GENERATOR, x, PRIME_N)
+      x = calculate_x
+      @verifier = modpow(GENERATOR, x, BIG_PRIME_N)
       @verifier
     end
 
-    def calculate_x(username, password, salt)
-      shex = '%x' % [salt]
-      spad = "" # if shex.length.odd? then '0' else '' end
-      sha256_str(spad + shex + sha256_str([username, password].join(':'))).hex
+    def calculate_x
+      shex = '%x' % [@salt]
+      inner = sha256_str([@username, @password].join(':'))
+      sha256_str([shex].pack('H*') + [inner].pack('H*')).hex
     end
 
     def calculate_client_s(x, a, bb, u)
