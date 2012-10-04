@@ -32,15 +32,17 @@ class AuthTest < Test::Unit::TestCase
   end
 
   def test_successful_auth
-    assert @client.authenticate(@server, @username, @password)
+    assert @client.authenticate(@server)
   end
 
   def test_a_wrong_password
-    assert !@client.authenticate(@server, @username, "wrong password")
+    client = SRP::Client.new(@username, "wrong password", @client.salt)
+    assert !client.authenticate(@server)
   end
 
   def test_wrong_username
-    assert !@client.authenticate(@server, "wrong username", @password)
+    client = SRP::Client.new("wrong username", @password, @client.salt)
+    assert !client.authenticate(@server)
   end
 end
 
