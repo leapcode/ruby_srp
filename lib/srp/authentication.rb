@@ -17,7 +17,7 @@ module SRP
       end
 
       def u
-        calculate_u(aa, bb, BIG_PRIME_N)
+        calculate_u(aa, bb)
       end
 
       # do not cache this - it's secret and someone might store the

@@ -30,8 +30,15 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
       end
     end
 
-    def sha256_hex(h)
-      Digest::SHA2.hexdigest([h].pack('H*'))
+    #  Hashes the (long) int args
+    def sha256_int(*args)
+      sha256_hex(*args.map{|a| a.to_s(16)})
+    end
+
+    #  Hashes the hex args
+    def sha256_hex(*args)
+      h = args.join('')
+      sha256_str([h].pack('H*'))
     end
 
     def sha256_str(s)
@@ -49,23 +56,17 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     protected
 
     def calculate_multiplier
-      n = BIG_PRIME_N
-      g = GENERATOR
-      nhex = '%x' % n
-      ghex = '0%x' % g
-      hashin = [nhex].pack('H*') + [ghex].pack('H*')
-      sha256_str(hashin).hex
+      # GENERATOR hex needs to be prefixed with 0 so it's not "2" -> 32
+      ghex = '0%x' % GENERATOR
+      sha256_hex(BIG_PRIME_N.to_s(16), ghex).hex
     end
 
     def calculate_m(aa, bb, s)
-      hashin = '%x%x%x' % [aa, bb, s]
-      sha256_hex(hashin).hex
+      sha256_int(aa, bb, s).hex
     end
 
-    def calculate_u(aa, bb, n)
-      aahex = '%x' % [aa]
-      bbhex = '%x' % [bb]
-      return sha256_hex("%x%x" % [aa, bb]).hex
+    def calculate_u(aa, bb)
+      sha256_int(aa, bb).hex
     end
   end
 

@@ -20,7 +20,7 @@ module SRP
       a = bigrand(32).hex
       aa = modpow(GENERATOR, a, BIG_PRIME_N) # A = g^a (mod N)
       bb = server.handshake(username, aa)
-      u = calculate_u(aa, bb, BIG_PRIME_N)
+      u = calculate_u(aa, bb)
       client_s = calculate_client_s(x, a, bb, u)
       server.validate(calculate_m(aa, bb, client_s))
     end
@@ -35,7 +35,7 @@ module SRP
     def calculate_x(username = @username, password = @password)
       shex = '%x' % [@salt]
       inner = sha256_str([username, password].join(':'))
-      sha256_str([shex].pack('H*') + [inner].pack('H*')).hex
+      sha256_hex(shex, inner).hex
     end
 
     def calculate_client_s(x, a, bb, u)
