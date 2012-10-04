@@ -30,4 +30,10 @@ class UtilTest < Test::Unit::TestCase
       "%x" % multiplier
   end
 
+  def test_hn_xor_hg
+    # >>> binascii.hexlify (pysrp.HNxorg(hashlib.sha256, N, g))
+    assert_equal '928ade491bc87bba9eb578701d44d30ed9080e60e542ba0d3b9c20ded9f592bf',
+      hn_xor_hg.bytes.map{|b| "%02x" % b.ord}.join
+  end
+
 end

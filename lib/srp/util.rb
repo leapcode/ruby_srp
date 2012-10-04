@@ -19,6 +19,10 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     EOS
     GENERATOR = 2 # g
 
+    def hn_xor_hg
+      byte_xor_hex(sha256_int(BIG_PRIME_N), sha256_int(GENERATOR))
+    end
+
     # a^n (mod m)
     def modpow(a, n, m = BIG_PRIME_N)
       r = 1
@@ -32,7 +36,7 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
 
     #  Hashes the (long) int args
     def sha256_int(*args)
-      sha256_hex(*args.map{|a| a.to_s(16)})
+      sha256_hex(*args.map{|a| "%02x" % a})
     end
 
     #  Hashes the hex args
@@ -56,9 +60,18 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     protected
 
     def calculate_multiplier
-      # GENERATOR hex needs to be prefixed with 0 so it's not "2" -> 32
-      ghex = '0%x' % GENERATOR
-      sha256_hex(BIG_PRIME_N.to_s(16), ghex).hex
+      sha256_int(BIG_PRIME_N, GENERATOR).hex
+    end
+
+    # turn two hex strings into byte arrays and xor them
+    #
+    # returns byte array
+    def byte_xor_hex(a, b)
+      a = [a].pack('H*')
+      b = [b].pack('H*')
+      a.bytes.each_with_index.map do |a_byte, i|
+        (a_byte ^ (b[i] || 0)).chr
+      end.join
     end
 
   end

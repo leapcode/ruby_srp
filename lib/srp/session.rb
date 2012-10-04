@@ -65,8 +65,10 @@ module SRP
 
     # this is outdated - SRP 6a uses
     # M = H(H(N) xor H(g), H(I), s, A, B, K)
-    def calculate_m(s)
-      sha256_int(@aa, @bb, s).hex
+    def calculate_m(secret)
+      n_xor_g_hash = sha256_str(hn_xor_hg).hex
+      username_hash = sha256_str(@user.username).hex
+      sha256_int(n_xor_g_hash, username_hash, @user.salt, @aa, @bb, secret).hex
     end
 
     def calculate_m2(m, secret)
