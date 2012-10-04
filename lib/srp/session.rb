@@ -27,7 +27,7 @@ module SRP
 
     def authenticate(m)
       if(m == calculate_m(server_secret))
-        return m2
+        return calculate_m2(m, server_secret)
       end
     end
 
@@ -63,18 +63,14 @@ module SRP
       modpow(base, @b)
     end
 
-    def m1
-      calculate_m(server_secret)
-    end
-
-    def m2
-      sha256_int(@aa, m1, server_secret).hex
-    end
-
     # this is outdated - SRP 6a uses
     # M = H(H(N) xor H(g), H(I), s, A, B, K)
     def calculate_m(s)
       sha256_int(@aa, @bb, s).hex
+    end
+
+    def calculate_m2(m, secret)
+      sha256_int(@aa, m, secret).hex
     end
 
     def calculate_u
