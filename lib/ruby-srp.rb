@@ -11,6 +11,7 @@ module SRP
   autoload :Client, 'srp/client'
   autoload :Authentication, 'srp/authentication'
   autoload :Util, 'srp/util'
+  autoload :Session, 'srp/session'
   class WrongPassword < StandardError
   end
 end

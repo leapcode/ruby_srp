@@ -61,13 +61,6 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
       sha256_hex(BIG_PRIME_N.to_s(16), ghex).hex
     end
 
-    def calculate_m(aa, bb, s)
-      sha256_int(aa, bb, s).hex
-    end
-
-    def calculate_u(aa, bb)
-      sha256_int(aa, bb).hex
-    end
   end
 
 end

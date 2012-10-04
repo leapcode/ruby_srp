@@ -17,7 +17,7 @@ module SRP
       end
 
       def u
-        calculate_u(aa, bb)
+        @u ||= calculate_u
       end
 
       # do not cache this - it's secret and someone might store the
@@ -28,11 +28,20 @@ module SRP
       end
 
       def m1(verifier)
-        calculate_m(aa, bb, secret(verifier))
+        calculate_m(secret(verifier))
       end
 
       def m2(m1, verifier)
-        calculate_m(aa, m1, secret(verifier))
+        sha256_int(@aa, m1, secret(verifier)).hex
+      end
+
+      protected
+      def calculate_u
+        sha256_int(@aa, @bb).hex
+      end
+
+      def calculate_m(s)
+        sha256_int(@aa, @bb, s).hex
       end
 
     end
