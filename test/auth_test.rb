@@ -35,7 +35,7 @@ class AuthTest < Test::Unit::TestCase
     assert @client.authenticate(@server, @username, @password)
   end
 
-  def test_wrong_password
+  def test_a_wrong_password
     assert !@client.authenticate(@server, @username, "wrong password")
   end
 

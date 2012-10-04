@@ -10,17 +10,17 @@ module SRP
     def initialize(username, password, salt = nil)
       @username = username
       @password = password
-      @salt = salt.hex || bigrand(4).hex
+      @salt = (salt || bigrand(4)).hex
       @multiplier = multiplier # let's cache it
       calculate_verifier
     end
 
     def authenticate(server, username, password)
-      x = calculate_x(username, password, salt)
+      x = calculate_x(username, password)
       a = bigrand(32).hex
-      aa = modpow(GENERATOR, a, PRIME_N) # A = g^a (mod N)
+      aa = modpow(GENERATOR, a, BIG_PRIME_N) # A = g^a (mod N)
       bb = server.handshake(username, aa)
-      u = calculate_u(aa, bb, PRIME_N)
+      u = calculate_u(aa, bb, BIG_PRIME_N)
       client_s = calculate_client_s(x, a, bb, u)
       server.validate(calculate_m(aa, bb, client_s))
     end
@@ -32,18 +32,18 @@ module SRP
       @verifier
     end
 
-    def calculate_x
+    def calculate_x(username = @username, password = @password)
       shex = '%x' % [@salt]
-      inner = sha256_str([@username, @password].join(':'))
+      inner = sha256_str([username, password].join(':'))
       sha256_str([shex].pack('H*') + [inner].pack('H*')).hex
     end
 
     def calculate_client_s(x, a, bb, u)
       base = bb
-      base += PRIME_N * @multiplier
-      base -= modpow(GENERATOR, x, PRIME_N) * @multiplier
-      base = base % PRIME_N
-      modpow(base, x * u + a, PRIME_N)
+      base += BIG_PRIME_N * @multiplier
+      base -= modpow(GENERATOR, x, BIG_PRIME_N) * @multiplier
+      base = base % BIG_PRIME_N
+      modpow(base, x * u + a, BIG_PRIME_N)
     end
   end
 end
