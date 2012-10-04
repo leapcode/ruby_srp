@@ -13,7 +13,7 @@ module SRP
         @aa = aa
         @b = bigrand(32).hex
         # B = g^b + k v (mod N)
-        @bb = (modpow(GENERATOR, @b, BIG_PRIME_N) + multiplier * verifier) % BIG_PRIME_N
+        @bb = (modpow(GENERATOR, @b) + multiplier * verifier) % BIG_PRIME_N
       end
 
       def u
@@ -23,8 +23,8 @@ module SRP
       # do not cache this - it's secret and someone might store the
       # session in a CookieStore
       def secret(verifier)
-        base = (modpow(verifier, u, BIG_PRIME_N) * aa) % BIG_PRIME_N
-        modpow(base, @b, BIG_PRIME_N)
+        base = (modpow(verifier, u) * aa) % BIG_PRIME_N
+        modpow(base, @b)
       end
 
       def m1(verifier)

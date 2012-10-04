@@ -18,7 +18,7 @@ module SRP
     def authenticate(server, username, password)
       x = calculate_x(username, password)
       a = bigrand(32).hex
-      aa = modpow(GENERATOR, a, BIG_PRIME_N) # A = g^a (mod N)
+      aa = modpow(GENERATOR, a) # A = g^a (mod N)
       bb = server.handshake(username, aa)
       u = calculate_u(aa, bb)
       client_s = calculate_client_s(x, a, bb, u)
@@ -28,7 +28,7 @@ module SRP
     protected
     def calculate_verifier
       x = calculate_x
-      @verifier = modpow(GENERATOR, x, BIG_PRIME_N)
+      @verifier = modpow(GENERATOR, x)
       @verifier
     end
 
@@ -41,9 +41,9 @@ module SRP
     def calculate_client_s(x, a, bb, u)
       base = bb
       base += BIG_PRIME_N * @multiplier
-      base -= modpow(GENERATOR, x, BIG_PRIME_N) * @multiplier
+      base -= modpow(GENERATOR, x) * @multiplier
       base = base % BIG_PRIME_N
-      modpow(base, x * u + a, BIG_PRIME_N)
+      modpow(base, x * u + a)
     end
   end
 end

@@ -20,7 +20,7 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     GENERATOR = 2 # g
 
     # a^n (mod m)
-    def modpow(a, n, m)
+    def modpow(a, n, m = BIG_PRIME_N)
       r = 1
       while true
         r = r * a % m if n[0] == 1
