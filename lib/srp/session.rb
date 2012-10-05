@@ -27,15 +27,16 @@ module SRP
 
     def authenticate(m)
       if(m == calculate_m(server_secret))
-        return calculate_m2(m, server_secret)
+        return calculate_m2
       end
     end
 
     protected
 
-    def initialize_server(aa)
+    # only seed b for testing purposes.
+    def initialize_server(aa, b = nil)
       @aa = aa
-      @b = bigrand(32).hex
+      @b =  b || bigrand(32).hex
       # B = g^b + k v (mod N)
       @bb = (modpow(GENERATOR, @b) + multiplier * @user.verifier) % BIG_PRIME_N
       @u = calculate_u
@@ -66,13 +67,14 @@ module SRP
     # this is outdated - SRP 6a uses
     # M = H(H(N) xor H(g), H(I), s, A, B, K)
     def calculate_m(secret)
-      n_xor_g_hash = sha256_str(hn_xor_hg).hex
+      @k = sha256_int(secret).hex
+      n_xor_g_long = hn_xor_hg.bytes.map{|b| "%02x" % b.ord}.join.hex
       username_hash = sha256_str(@user.username).hex
-      sha256_int(n_xor_g_hash, username_hash, @user.salt, @aa, @bb, secret).hex
+      @m = sha256_int(n_xor_g_long, username_hash, @user.salt, @aa, @bb, @k).hex
     end
 
-    def calculate_m2(m, secret)
-      sha256_int(@aa, m, secret).hex
+    def calculate_m2
+      sha256_int(@aa, @m, @k).hex
     end
 
     def calculate_u
