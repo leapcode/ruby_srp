@@ -1,23 +1,25 @@
 require File.expand_path(File.dirname(__FILE__) + '/test_helper')
 
-class User
+# single user test server.
+# You obviously want sth. different for real life.
+class Server
 
-  include SRP::Authentication
+  attr_accessor :salt, :verifier, :username
 
-  attr_accessor :salt, :verifier
-
-  def initialize(salt, verifier)
+  def initialize(salt, verifier, username)
     @salt = salt
     @verifier = verifier
+    @username = username
   end
 
   def handshake(login, aa)
-    @session = initialize_auth(aa)
+    # this can be serialized and needs to be persisted between requests
+    @session = SRP::Session.new(self, aa)
     return @session.bb
   end
 
   def validate(m)
-    authenticate(m, @session)
+    @session.authenticate(m)
   end
 
 end
@@ -28,19 +30,21 @@ class AuthTest < Test::Unit::TestCase
     @username = 'user'
     @password = 'opensesami'
     @client = SRP::Client.new(@username, @password)
-    @server = User.new(@client.salt, @client.verifier)
+    @server = Server.new(@client.salt, @client.verifier, @username)
   end
 
   def test_successful_auth
-    assert @client.authenticate(@server, @username, @password)
+    assert @client.authenticate(@server)
   end
 
-  def test_wrong_password
-    assert !@client.authenticate(@server, @username, "wrong password")
+  def test_a_wrong_password
+    client = SRP::Client.new(@username, "wrong password", @client.salt)
+    assert !client.authenticate(@server)
   end
 
   def test_wrong_username
-    assert !@client.authenticate(@server, "wrong username", @password)
+    client = SRP::Client.new("wrong username", @password, @client.salt)
+    assert !client.authenticate(@server)
   end
 end
 

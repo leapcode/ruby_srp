@@ -5,46 +5,37 @@ module SRP
 
     include Util
 
-    attr_reader :salt, :verifier
+    attr_reader :salt, :verifier, :username
 
-    def initialize(username, password)
+    def initialize(username, password, salt = nil)
       @username = username
       @password = password
-      @salt = "5d3055e0acd3ddcfc15".hex # bigrand(10).hex
-      @multiplier = multiplier # let's cache it
+      @salt = salt || bigrand(4).hex
       calculate_verifier
     end
 
-    def authenticate(server, username, password)
-      x = calculate_x(username, password, salt)
-      a = bigrand(32).hex
-      aa = modpow(GENERATOR, a, PRIME_N) # A = g^a (mod N)
-      bb = server.handshake(username, aa)
-      u = calculate_u(aa, bb, PRIME_N)
-      client_s = calculate_client_s(x, a, bb, u)
-      server.validate(calculate_m(aa, bb, client_s))
+    def authenticate(server)
+      @session = SRP::Session.new(self)
+      @session.handshake(server)
+      @session.validate(server)
+    end
+
+    def private_key
+      @private_key ||= calculate_private_key
     end
 
     protected
+
     def calculate_verifier
-      x = calculate_x(@username, @password, @salt)
-      @verifier = modpow(GENERATOR, x, PRIME_N)
-      @verifier
+      @verifier ||= modpow(GENERATOR, private_key)
     end
 
-    def calculate_x(username, password, salt)
-      shex = '%x' % [salt]
-      spad = "" # if shex.length.odd? then '0' else '' end
-      sha256_str(spad + shex + sha256_str([username, password].join(':'))).hex
+    def calculate_private_key
+      shex = '%x' % [@salt]
+      inner = sha256_str([@username, @password].join(':'))
+      sha256_hex(shex, inner).hex
     end
 
-    def calculate_client_s(x, a, bb, u)
-      base = bb
-      base += PRIME_N * @multiplier
-      base -= modpow(GENERATOR, x, PRIME_N) * @multiplier
-      base = base % PRIME_N
-      modpow(base, x * u + a, PRIME_N)
-    end
   end
 end
 
