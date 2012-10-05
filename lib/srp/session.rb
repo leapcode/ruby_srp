@@ -27,11 +27,23 @@ module SRP
 
     def authenticate(m)
       if(m == calculate_m(server_secret))
-        return calculate_m2
+        return @m2 = calculate_m2
+      end
+    end
+
+    def to_json(options={})
+      if @m2
+        { :M2 => @m2.to_s(16) }.to_json(options)
+      else
+        { :B => bb.to_s(16),
+#          :b => @b.to_s(16),    # only use for debugging
+          :salt => @user.salt.to_s(16)
+        }.to_json(options)
       end
     end
 
     protected
+
 
     # only seed b for testing purposes.
     def initialize_server(aa, b = nil)
@@ -80,6 +92,7 @@ module SRP
     def calculate_u
       sha256_int(@aa, @bb).hex
     end
+
   end
 end
 
