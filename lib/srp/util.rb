@@ -41,7 +41,7 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
 
     #  Hashes the hex args
     def sha256_hex(*args)
-      h = args.join('')
+      h = args.map{|a| a.length.odd? ? "0#{a}" : a }.join('')
       sha256_str([h].pack('H*'))
     end
 
