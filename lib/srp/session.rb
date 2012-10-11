@@ -25,7 +25,8 @@ module SRP
 
     def authenticate(m)
       if(m == calculate_m(server_secret))
-        return @m2 = calculate_m2
+        @m2 = calculate_m2
+        return @user
       end
     end
 

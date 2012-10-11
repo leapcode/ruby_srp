@@ -1,4 +1,5 @@
 require File.expand_path(File.dirname(__FILE__) + '/test_helper')
+require 'json'
 
 class SessionTest < Test::Unit::TestCase
 
@@ -21,7 +22,8 @@ class SessionTest < Test::Unit::TestCase
     session = SRP::Session.new(self, aa)
     session.send(:initialize_server, aa, b) # seeding b to compare to py_srp
     assert_equal bb.to_s(16), session.bb.to_s(16)
-    assert_equal m2, session.authenticate(m)
+    assert_equal self, session.authenticate(m)
+    assert_equal({'M2' => m2.to_s(16)}.to_json, session.to_json)
   end
 
   def test_zero_padded_salt
