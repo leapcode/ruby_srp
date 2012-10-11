@@ -1,8 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/util')
-
 module SRP
   class Session
-    include Util
+    include SRP::Util
     attr_accessor :user, :aa, :bb
 
     def initialize(user, aa=nil)

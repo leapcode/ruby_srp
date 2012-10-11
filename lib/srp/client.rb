@@ -1,9 +1,7 @@
-require File.expand_path(File.dirname(__FILE__) + '/util')
-
 module SRP
   class Client
 
-    include Util
+    include SRP::Util
 
     attr_reader :salt, :verifier, :username
 
