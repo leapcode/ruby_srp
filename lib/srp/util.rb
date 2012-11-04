@@ -70,7 +70,7 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
       a = [a].pack('H*')
       b = [b].pack('H*')
       a.bytes.each_with_index.map do |a_byte, i|
-        (a_byte ^ (b[i] || 0)).chr
+        (a_byte ^ (b[i].ord || 0)).chr
       end.join
     end
 
