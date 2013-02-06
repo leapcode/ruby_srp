@@ -9,7 +9,9 @@ class SessionTest < Test::Unit::TestCase
     @username = "testuser"
     @password = "password"
     @salt = '4c78c3f8'.hex
-    @client = SRP::Client.new(@username, @password, @salt)
+    @client = SRP::Client.new @username,
+      :password => @password,
+      :salt => @salt
     @verifier = @client.verifier
   end
 
@@ -35,7 +37,9 @@ class SessionTest < Test::Unit::TestCase
     b = "78e12fc099be1409e0fce3bf84484d89d58710bcc3d8a0e05227fb291be3fb28".hex
     bb = "d8d50a862b7e8a897f8b0554c4a474e8aa152bd08f23436773fbb977e81cbf5e8262937ffb7ad6b72e3aa7f72deec947cdb286ab466e490d7c544bf443331ad12657c8f9bb2aabf508b73ea1ed29d03a060f5f2a70baef858bdb79c5c878844c058fe10c2cc746b0fb701e98d8d6405ab7d0b65bb4f87cf8e47b25ae4ee6e53b".hex
     m = "d5cbec7254ce66f421ceddbfe8a0a8991b5be2aa9c25d868f073f4459dfc358b".hex
-    client = SRP::Client.new(@username, password, @salt)
+    client = SRP::Client.new @username,
+      :password => password,
+      :salt => @salt
     assert_equal @verifier.to_s(16), client.verifier.to_s(16)
     session = SRP::Session.new(self, aa)
     session.send(:initialize_server, aa, b) # seeding b to compare to py_srp

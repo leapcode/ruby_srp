@@ -29,7 +29,8 @@ class AuthTest < Test::Unit::TestCase
   def setup
     @username = 'user'
     @password = 'opensesami'
-    @client = SRP::Client.new(@username, @password)
+    @client = SRP::Client.new @username,
+      :password => @password
     @server = Server.new(@client.salt, @client.verifier, @username)
   end
 
@@ -38,12 +39,16 @@ class AuthTest < Test::Unit::TestCase
   end
 
   def test_a_wrong_password
-    client = SRP::Client.new(@username, "wrong password", @client.salt)
+    client = SRP::Client.new @username,
+      :password => "wrong password",
+      :salt => @client.salt
     assert !client.authenticate(@server)
   end
 
   def test_wrong_username
-    client = SRP::Client.new("wrong username", @password, @client.salt)
+    client = SRP::Client.new "wrong username",
+      :password => @password,
+      :salt => @client.salt
     assert !client.authenticate(@server)
   end
 end

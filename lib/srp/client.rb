@@ -5,11 +5,16 @@ module SRP
 
     attr_reader :salt, :verifier, :username
 
-    def initialize(username, password, salt = nil)
+    def initialize(username, options)
       @username = username
-      @password = password
-      @salt = salt || bigrand(4).hex
-      calculate_verifier
+      if options[:password]
+        @password = options[:password]
+        @salt = options[:salt] || bigrand(4).hex
+        calculate_verifier
+      else
+        @verifier = options[:verifier]
+        @salt = options[:salt]
+      end
     end
 
     def authenticate(server)
