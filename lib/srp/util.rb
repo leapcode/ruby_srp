@@ -3,6 +3,7 @@ require 'openssl'
 
 module SRP
   module Util
+    require 'securerandom'
 
     # constants both sides know
     # in this case taken from srp-js
@@ -39,7 +40,7 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     end
 
     def bigrand(bytes)
-      OpenSSL::Random.random_bytes(bytes).unpack("H*")[0]
+      SecureRandom.random_bytes(bytes).unpack("H*")[0]
     end
 
     def multiplier
