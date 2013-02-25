@@ -26,6 +26,7 @@ class SessionTest < Test::Unit::TestCase
     assert_equal bb.to_s(16), session.bb.to_s(16)
     assert_equal self, session.authenticate(m)
     assert_equal({'M2' => m2.to_s(16)}.to_json, session.to_json)
+    assert_equal({:M2 => m2.to_s(16)}, session.to_hash)
   end
 
   def test_zero_padded_salt

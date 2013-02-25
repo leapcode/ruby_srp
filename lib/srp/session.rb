@@ -30,15 +30,19 @@ module SRP
       end
     end
 
-    def to_json(options={})
+    def to_hash
       if @m2
-        { :M2 => @m2.to_s(16) }.to_json(options)
+        { :M2 => @m2.to_s(16) }
       else
         { :B => bb.to_s(16),
-#          :b => @b.to_s(16),    # only use for debugging
+#         :b => @b.to_s(16),    # only use for debugging
           :salt => @user.salt.to_s(16)
-        }.to_json(options)
+        }
       end
+    end
+
+    def to_json(options={})
+      to_hash.to_json(options)
     end
 
     protected
