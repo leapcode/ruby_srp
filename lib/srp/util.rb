@@ -54,7 +54,7 @@ d15dc7d7b46154d6b6ce8ef4ad69b15d4982559b297bcf1885c529f566660e5
     end
 
     def multiplier
-      @k ||= calculate_multiplier
+      @muliplier ||= calculate_multiplier
     end
 
     protected
