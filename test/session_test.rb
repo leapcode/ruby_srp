@@ -38,13 +38,6 @@ class SessionTest < Test::Unit::TestCase
     assert_equal client, session.authenticate(data[:m].hex)
   end
 
-  def fixture(filename)
-    path = File.expand_path("../fixtures/#{filename}.json", __FILE__)
-    HashWithIndifferentAccess[JSON.parse(File.read(path))]
-  end
-
-
-
   def stub_client(data)
     @username = data[:username]
     @password = data[:password]
