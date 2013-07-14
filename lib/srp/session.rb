@@ -8,7 +8,7 @@ module SRP
     # aa: SRPs A ephemeral value. encoded as a hex string.
     def initialize(user, aa=nil)
       @user = user
-      aa ? initialize_server(aa.hex) : initialize_client
+      aa ? initialize_server(aa) : initialize_client
     end
 
     # client -> server: I, A = g^a
@@ -36,7 +36,7 @@ module SRP
       if @authenticated
         { :M2 => m2 }
       else
-        { :B => bb.to_s(16),
+        { :B => bb,
 #         :b => @b.to_s(16),    # only use for debugging
           :salt => @user.salt.to_s(16)
         }
@@ -53,8 +53,8 @@ module SRP
         username: @user.username,
         salt: @user.salt.to_s(16),
         verifier: @user.verifier.to_s(16),
-        aa: aa.to_s(16),
-        bb: bb.to_s(16),
+        aa: aa,
+        bb: bb,
         s: secret.to_s(16),
         k: k,
         m: m,
@@ -63,16 +63,19 @@ module SRP
     end
 
     def aa
-      @aa ||= modpow(GENERATOR, @a) # A = g^a (mod N)
+      @aa ||= modpow(GENERATOR, @a).to_s(16) # A = g^a (mod N)
     end
 
     # B = g^b + k v (mod N)
     def bb
-      @bb ||= (modpow(GENERATOR, @b) + multiplier * @user.verifier) % BIG_PRIME_N
+      @bb ||= calculate_bb.to_s(16)
     end
 
     protected
 
+    def calculate_bb
+      (modpow(GENERATOR, @b) + multiplier * @user.verifier) % BIG_PRIME_N
+    end
 
     # only seed b for testing purposes.
     def initialize_server(aa, ephemeral = nil)
@@ -92,29 +95,29 @@ module SRP
 
     # client: K = H( (B - kg^x) ^ (a + ux) )
     def client_secret
-      base = bb
+      base = bb.hex
       # base += BIG_PRIME_N * @multiplier
       base -= modpow(GENERATOR, @user.private_key) * multiplier
       base = base % BIG_PRIME_N
-      modpow(base, @user.private_key * u + @a)
+      modpow(base, @user.private_key * u.hex + @a)
     end
 
     # server: K = H( (Av^u) ^ b )
     # do not cache this - it's secret and someone might store the
     # session in a CookieStore
     def server_secret
-      base = (modpow(@user.verifier, u) * aa) % BIG_PRIME_N
+      base = (modpow(@user.verifier, u.hex) * aa.hex) % BIG_PRIME_N
       modpow(base, @b)
     end
 
     # SRP 6a uses
     # M = H(H(N) xor H(g), H(I), s, A, B, K)
     def m
-      @m ||= sha256_hex(n_xor_g_long, login_hash, @user.salt.to_s(16), aa.to_s(16), bb.to_s(16), k)
+      @m ||= sha256_hex(n_xor_g_long, login_hash, @user.salt.to_s(16), aa, bb, k)
     end
 
     def m2
-      @m2 ||= sha256_hex(aa.to_s(16), m, k)
+      @m2 ||= sha256_hex(aa, m, k)
     end
 
     def k
@@ -130,7 +133,7 @@ module SRP
     end
 
     def u
-      @u ||= sha256_int(aa, bb).hex
+      @u ||= sha256_hex(aa, bb)
     end
 
   end

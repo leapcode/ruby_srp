@@ -54,7 +54,7 @@ class SessionTest < Test::Unit::TestCase
     b  = data[:b].hex
     session = SRP::Session.new(client, aa)
     # seed b to compare to py_srp
-    session.send(:initialize_server, aa.hex, b)
+    session.send(:initialize_server, aa, b)
     session
   end
 
