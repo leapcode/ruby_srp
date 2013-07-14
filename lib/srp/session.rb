@@ -3,9 +3,12 @@ module SRP
     include SRP::Util
     attr_accessor :user
 
+    # params:
+    # user: user object that represents and account (username, salt, verifier)
+    # aa: SRPs A ephemeral value. encoded as a hex string.
     def initialize(user, aa=nil)
       @user = user
-      aa ? initialize_server(aa) : initialize_client
+      aa ? initialize_server(aa.hex) : initialize_client
     end
 
     # client -> server: I, A = g^a
@@ -31,7 +34,7 @@ module SRP
 
     def to_hash
       if @authenticated
-        { :M2 => m2.to_s(16) }
+        { :M2 => m2 }
       else
         { :B => bb.to_s(16),
 #         :b => @b.to_s(16),    # only use for debugging
@@ -53,9 +56,9 @@ module SRP
         aa: aa.to_s(16),
         bb: bb.to_s(16),
         s: secret.to_s(16),
-        k: k.to_s(16),
-        m: m.to_s(16),
-        m2: m2.to_s(16)
+        k: k,
+        m: m,
+        m2: m2
       }
     end
 
@@ -107,23 +110,23 @@ module SRP
     # SRP 6a uses
     # M = H(H(N) xor H(g), H(I), s, A, B, K)
     def m
-      @m ||= sha256_int(n_xor_g_long, login_hash, @user.salt, aa, bb, k).hex
+      @m ||= sha256_hex(n_xor_g_long, login_hash, @user.salt.to_s(16), aa.to_s(16), bb.to_s(16), k)
     end
 
     def m2
-      @m2 ||= sha256_int(aa, m, k).hex
+      @m2 ||= sha256_hex(aa.to_s(16), m, k)
     end
 
     def k
-      @k ||= sha256_int(secret).hex
+      @k ||= sha256_int(secret)
     end
 
     def n_xor_g_long
-      @n_xor_g_long ||= hn_xor_hg.bytes.map{|b| "%02x" % b.ord}.join.hex
+      @n_xor_g_long ||= hn_xor_hg.bytes.map{|b| "%02x" % b.ord}.join
     end
 
     def login_hash
-      @login_hash ||= sha256_str(@user.username).hex
+      @login_hash ||= sha256_str(@user.username)
     end
 
     def u
