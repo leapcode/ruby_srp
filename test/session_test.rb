@@ -11,7 +11,7 @@ class SessionTest < Test::Unit::TestCase
     session = init_session(client, data)
 
     assert_same_values(data, session.internal_state)
-    assert_equal client, session.authenticate(data[:m].hex)
+    assert_equal client, session.authenticate(data[:m])
     assert_equal({:M2 => data[:m2]}, session.to_hash)
     assert_equal({'M2' => data[:m2]}.to_json, session.to_json)
   end
@@ -26,7 +26,7 @@ class SessionTest < Test::Unit::TestCase
     state.delete(:salt)
 
     assert_same_values(data, state)
-    assert_equal client, session.authenticate(data[:m].hex)
+    assert_equal client, session.authenticate(data[:m])
   end
 
   def test_failing_js_login
@@ -35,15 +35,8 @@ class SessionTest < Test::Unit::TestCase
     session = init_session(client, data)
 
     assert_same_values(data, session.internal_state)
-    assert_equal client, session.authenticate(data[:m].hex)
+    assert_equal client, session.authenticate(data[:m])
   end
-
-  def fixture(filename)
-    path = File.expand_path("../fixtures/#{filename}.json", __FILE__)
-    HashWithIndifferentAccess[JSON.parse(File.read(path))]
-  end
-
-
 
   def stub_client(data)
     @username = data[:username]
@@ -57,7 +50,7 @@ class SessionTest < Test::Unit::TestCase
   end
 
   def init_session(client, data)
-    aa = data[:aa].hex
+    aa = data[:aa]
     b  = data[:b].hex
     session = SRP::Session.new(client, aa)
     # seed b to compare to py_srp
