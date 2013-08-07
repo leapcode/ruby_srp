@@ -5,6 +5,14 @@ class SessionTest < Test::Unit::TestCase
 
   Struct.new("Client", :username, :salt, :verifier)
 
+  def test_client_public_key_validation
+    aa = SRP::Util::BIG_PRIME_N
+    client = {} # stub
+    assert_raises SRP::InvalidEphemeral do
+      session = SRP::Session.new(client, aa)
+    end
+  end
+
   def test_equivalance_to_py_srp
     data = fixture(:py_srp)
     client = stub_client(data)

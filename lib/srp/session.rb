@@ -13,7 +13,9 @@ module SRP
 
     # client -> server: I, A = g^a
     def handshake(server)
-      @bb = server.handshake(user.username, aa)
+      bb = server.handshake(user.username, aa)
+      validate_ephemeral(bb)
+      @bb = bb
     end
 
     # client -> server: M = H(H(N) xor H(g), H(I), s, A, B, K)
@@ -79,6 +81,7 @@ module SRP
 
     # only seed b for testing purposes.
     def initialize_server(aa, ephemeral = nil)
+      validate_ephemeral(aa)
       @aa = aa
       @b = ephemeral || bigrand(32).hex
     end
@@ -108,6 +111,12 @@ module SRP
     def server_secret
       base = (modpow(@user.verifier, u.hex) * aa.hex) % BIG_PRIME_N
       modpow(base, @b)
+    end
+
+    def validate_ephemeral(ephemeral)
+      if ephemeral.hex % BIG_PRIME_N == 0
+        raise InvalidEphemeral.new 'insecure ephemeral value'
+      end
     end
 
     # SRP 6a uses
