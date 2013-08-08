@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "ruby-srp"
-  s.version           = "0.2.0"
+  s.version           = "0.2.1"
   s.platform          = Gem::Platform::RUBY
   s.authors           = ["Azul"]
   s.email             = ["azul@leap.se"]
@@ -14,7 +14,8 @@ Gem::Specification.new do |s|
   # s.add_runtime_dependency "other", "~> 1.2"
  
   # If you have development dependencies, add them here
-  # s.add_development_dependency "another", "= 0.9"
+  s.add_development_dependency "activesupport"
+  s.add_development_dependency "rake"
  
   # The list of files to be contained in the gem 
   s.files         = `git ls-files`.split("\n")
