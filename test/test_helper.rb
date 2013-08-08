@@ -1,6 +1,6 @@
 require "rubygems"
 require 'test/unit'
-require 'activesupport' # for HashWithIndifferentAccess
+require 'active_support/hash_with_indifferent_access'
 require File.expand_path(File.dirname(__FILE__) + '/../lib/ruby-srp.rb')
 
 class Test::Unit::TestCase
