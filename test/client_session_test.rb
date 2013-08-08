@@ -19,6 +19,7 @@ class ClientSessionTest < Test::Unit::TestCase
 
   def test_retrieval_of_bb
     bb = SRP::Util::BIG_PRIME_N + 1
+    bb = bb.to_s(16)
     user = UserStub.new
     server = ServerStub.new(bb)
     session = SRP::Session.new(user)
@@ -28,7 +29,7 @@ class ClientSessionTest < Test::Unit::TestCase
 
   def test_validation_of_bb
     user = UserStub.new
-    server = ServerStub.new(SRP::Util::BIG_PRIME_N)
+    server = ServerStub.new(SRP::Util::BIG_PRIME_N.to_s(16))
     assert_raises SRP::InvalidEphemeral do
       session = SRP::Session.new(user)
       session.handshake(server)

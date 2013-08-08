@@ -6,7 +6,7 @@ class SessionTest < Test::Unit::TestCase
   Struct.new("Client", :username, :salt, :verifier)
 
   def test_client_public_key_validation
-    aa = SRP::Util::BIG_PRIME_N
+    aa = SRP::Util::BIG_PRIME_N.to_s(16)
     client = {} # stub
     assert_raises SRP::InvalidEphemeral do
       session = SRP::Session.new(client, aa)
